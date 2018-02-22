@@ -113,7 +113,14 @@ export class NgTableComponent {
   }
 
   public getData(row:any, propertyName:string):string {
-    return propertyName.split('.').reduce((prev:any, curr:string) => prev[curr], row);
+    let value:string = propertyName.split('.').reduce((prev:any, curr:string) => prev[curr], row);
+
+    let column = this._columns.find((col:any) => col.name === propertyName);
+    if (column.render) {
+      value = column.render(value, row);
+    }
+
+    return value;
   }
 
   public cellClick(row:any, column:any):void {
